@@ -5,10 +5,11 @@ import UI.Target;
 import View.View;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
 
 
 /**
@@ -25,12 +26,20 @@ public class GameModel {
 
     Set<Target> targets = new HashSet<>();
 
-    final static int BOARD_SIZE = 4;
+    final static int BOARD_SIZE = 2;
+
+    private Map<Name, String> dirNameMap = new HashMap<>();
+
+
+    public GameModel() {
+        createMapDirectory();
+    }
 
 
     public void setView(View view) {
         this.view = view;
     }
+
     public void setTargetImage(Target target) {
         count += 1;
 
@@ -40,10 +49,7 @@ public class GameModel {
             setSecond(target);
         }
 
-        switch (target.getName()) {
-            case UVA -> target.setUva();
-            case BANANA -> target.setBanana();
-        }
+        setImageView(target.getName(), target);
     }
 
 
@@ -52,8 +58,7 @@ public class GameModel {
             if (this.count % 2 == 0 && this.count != 0) {
                 if (this.first.getName() == this.second.getName() && !first.equals(second)) {
                     view.setImages();
-                }
-                else {
+                } else {
                     view.disappearOnWrongTarget(getFirst());
                     view.disappearOnWrongTarget(getSecond());
                 }
@@ -122,8 +127,77 @@ public class GameModel {
     /**
      * @param target is the button that will be clicked to find the right image
      */
-    public void disappear( Target target ) {
+    public void disappear(Target target) {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(3), actionEvent -> target.cleanImagesTargets()));
         timeline.play();
     }
+
+    public void createMapDirectory() {
+        List<Name> names = Name.targetList();
+
+        XmlHandler xmlHandler = new XmlHandler();
+        List<String> directories = xmlHandler.xmlParser();
+
+        Map<Name, String> dirMap = new HashMap<>();
+
+        String lowercaseName;
+        String[] dir;
+
+        for (Name name : names) {
+            for (int j = 0; j < names.size(); j++) {
+                lowercaseName = name.toString().toLowerCase() + ".jpg";
+
+                // get the last part of the directory which is the filename
+                dir = directories.get(j).split("/");
+
+
+                if (dir[2].equals(lowercaseName)) {
+
+                    dirMap.put(name, directories.get(j));
+                }
+            }
+        }
+        setDirNameMap(dirMap);
+    }
+
+
+    public void setImageView(Name name, Target target) {
+
+        String directory = getDirNameMap().get(name);
+
+        ImageView imageView = new ImageView(directory);
+
+        target.setTargetImage(imageView);
+    }
+
+    public static void main(String[] args) {
+
+
+    }
+
+    public void setDirNameMap(Map<Name, String> dirInfo) {
+        this.dirNameMap = dirInfo;
+    }
+
+    public Map<Name, String> getDirNameMap() {
+        return dirNameMap;
+    }
+
+
+    /**
+     * @return return a list of names that identify which images are related with the target
+     */
+    public List<Name> namesOfTargets() {
+
+        List<Name> targetNames = new ArrayList<>();
+        List<Name> names = Name.targetList();
+
+        Collections.shuffle(names);
+
+        targetNames.addAll(names.subList(0,BOARD_SIZE));
+        targetNames.addAll(names.subList(0, BOARD_SIZE));
+
+        return targetNames;
+    }
+
 }

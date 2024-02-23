@@ -2,6 +2,7 @@ package UI;
 
 import Model.Name;
 import UI.Position;
+import View.View;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 
@@ -13,8 +14,6 @@ public class Target extends Button {
 
     final double WIDTH = 80;
     private Position pos;
-    private final ImageView uva = new ImageView("File:C:\\Users\\JesseSacramento\\IdeaProjects\\Animation\\src\\Resources\\uva.jpg");
-    private final ImageView banana = new ImageView("File:C:\\Users\\JesseSacramento\\IdeaProjects\\Animation\\src\\Resources\\banana.jpg");
     private final ImageView noImage = new ImageView("File:C:\\Users\\JesseSacramento\\IdeaProjects\\Animation\\src\\Resources\\noImage.jpg");
     private final Name name;
 
@@ -23,15 +22,10 @@ public class Target extends Button {
         this.name = name;
     }
 
-    public void setUva(){
-        uva.setFitWidth(WIDTH);
-        uva.setPreserveRatio(true);
-        setGraphic(uva);
-    }
-    public void setBanana(){
-        banana.setFitWidth(WIDTH);
-        banana.setPreserveRatio(true);
-        setGraphic(banana);
+    public void setTargetImage( ImageView imageView ){
+        imageView.setFitWidth(WIDTH);
+        imageView.setPreserveRatio(true);
+        setGraphic(imageView);
     }
 
     public Position getPos() {

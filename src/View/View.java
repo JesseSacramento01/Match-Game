@@ -10,6 +10,5 @@ import UI.Target;
 public interface View {
     void disappearOnWrongTarget(Target target);
     void setImages();
-
     Board initBoard();
 }

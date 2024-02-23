@@ -14,9 +14,6 @@ import javafx.util.Duration;
 
 import java.util.*;
 
-import static Model.Name.BANANA;
-import static Model.Name.UVA;
-
 /**
  * @author Jessé Sacramento
  * @version 26/01/2024
@@ -26,7 +23,7 @@ public class Board extends GridPane implements View {
 
     final static int TARGET_WIDTH = 10;
     final static int TARGET_HEIGHT = 10;
-    final static int BOARD_SIZE = 4;
+    final static int BOARD_SIZE = 2;
 
 
     GameModel model;
@@ -43,7 +40,7 @@ public class Board extends GridPane implements View {
      * @return return a board created with a certain size
      */
     public Board initBoard() {
-        List<Name> names = namesOfTarget();
+        List<Name> names = model.namesOfTargets();
         int times = 0;
         Board board = new Board(model);
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -59,8 +56,6 @@ public class Board extends GridPane implements View {
                 ButtonHandler handler = new ButtonHandler();
 
                 target.setOnAction(handler);
-
-
             }
         }
 
@@ -75,11 +70,7 @@ public class Board extends GridPane implements View {
                 " -fx-border-width: 1px;");
 
 
-        if (target.getName().equals(UVA)) {
-            target.setUva();
-        } else {
-            target.setBanana();
-        }
+        model.setImageView(target.getName(), target);
 
     }
 
@@ -90,31 +81,13 @@ public class Board extends GridPane implements View {
         board.setAlignment(Pos.CENTER);
     }
 
-    /**
-     * @return return a list of names that identify which images are related with the target
-     */
-    public List<Name> namesOfTarget() {
-        List<Name> names = new ArrayList<>();
-        for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++) {
-            names.add(UVA);
-            names.add(BANANA);
-        }
-
-        Collections.shuffle(names);
-
-        return names;
-    }
-
 
 
     /**
      * @param target is the button that will be clicked to find the right image
      */
     public void disappearOnWrongTarget(Target target) {
-        switch (target.getName()) {
-            case UVA -> target.setUva();
-            case BANANA -> target.setBanana();
-        }
+        model.setImageView(target.getName(), target);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.3), actionEvent -> target.cleanImagesTargets()));
         timeline.play();
     }
@@ -141,27 +114,19 @@ public class Board extends GridPane implements View {
 
     /**
      * Method that verifies if both recent target images are equals
-     * this.count % 2 == 0 because of the match images
+     * this count % 2 == 0 because of the match images
      * the condition !equals will make sure that the objects are not the same but both have the same image
      * in the switch there's just the second target because the first will be already selected
+     * And then when selected and matched, the button will be disabled make
      */
-
-
     public void setImages() {
-        switch (model.getFirst().getName()) {
-            case UVA -> {
-                model.getSecond().setUva();
-                model.getFirst().setDisable(true);
-                model.getSecond().setDisable(true);
-            }
-            case BANANA -> {
-                model.getSecond().setBanana();
-                model.getFirst().setDisable(true);
-                model.getSecond().setDisable(true);
-            }
-        }
+        model.setImageView(model.getSecond().getName(), model.getSecond());
+        model.getFirst().setDisable(true);
+        model.getSecond().setDisable(true);
+
+        model.setImageView(model.getSecond().getName(), model.getSecond());
+        model.getFirst().setDisable(true);
+        model.getSecond().setDisable(true);
+
     }
-
-
-
 }
