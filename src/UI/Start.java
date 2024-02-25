@@ -2,15 +2,18 @@ package UI;
 
 import Model.GameModel;
 import javafx.application.Application;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import static java.lang.System.exit;
+
+
 
 /**
  * @author Jessé Sacramento
@@ -21,6 +24,8 @@ public class Start extends Application {
     static final int WIDTH = 800;
     static final int HEIGHT = 500;
 
+    public static Stage stage;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -28,24 +33,13 @@ public class Start extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        Button startButton = new Button("Start Game");
-        Button optionsButton = new Button("Options");
-        Button exitButton = new Button("Exit");
-
-        exitButton.setOnAction((actionEvent) -> exit(0));
-
         GameModel model = new GameModel();
-        Board board = new Board(model);
 
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(board.initBoard(), startButton,optionsButton,exitButton);
-        setBackGroundImage( vBox );
-        vBox.setAlignment(Pos.CENTER);
+        stage = primaryStage;
 
-        Scene scene = new Scene(vBox,WIDTH,HEIGHT);
+        settings(stage, model);
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.show();
 
     }
 
@@ -57,6 +51,56 @@ public class Start extends Application {
         vBox.setBackground(background);
     }
 
+    public void settings( Stage stage, GameModel model ){
 
+        model.setLevel( model.getLevel() );
+
+        Board board = new Board(model);
+
+        VBox vBox = new VBox();
+
+        HBox hBox = new HBox();
+        HBox boardBox = new HBox();
+
+        Label label = new Label();
+
+        label.setText("Level  " + model.getLevel());
+        label.setFont(Font.font(24));
+        label.setStyle("-fx-text-fill:white;");
+        label.setAlignment(Pos.CENTER);
+
+        hBox.getChildren().add(label);
+
+        boardBox.getChildren().add(board.initBoard());
+
+        vBox.getChildren().addAll(hBox, boardBox);
+        setBackGroundImage( vBox );
+        vBox.setAlignment(Pos.CENTER);
+
+        hBox.setAlignment(Pos.TOP_CENTER);
+        boardBox.setAlignment(Pos.BOTTOM_CENTER);
+
+
+
+        Scene scene = new Scene(vBox,WIDTH,HEIGHT);
+
+        stage.setScene(scene);
+
+        if (model.getLevel() == 5) {
+            newScene();
+        }
+    }
+
+    public void newScene(){
+
+        VBox vBox = new VBox();
+
+        vBox.getChildren().addAll();
+        setBackGroundImage( vBox );
+        vBox.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(vBox,WIDTH,HEIGHT);
+        stage.setScene(scene);
+    }
 
 }

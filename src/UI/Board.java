@@ -21,16 +21,23 @@ import java.util.*;
 
 public class Board extends GridPane implements View {
 
-    final static int TARGET_WIDTH = 10;
-    final static int TARGET_HEIGHT = 10;
-    final static int BOARD_SIZE = 2;
+    final static int TARGET_WIDTH = 100;
+    final static int TARGET_HEIGHT = 100;
 
 
     GameModel model;
+    final private int boardSizeRow;
+    final private int boardSizeCol;
+
 
     public Board(GameModel model) {
         this.model = model;
         model.setView(this);
+
+        this.boardSizeRow = model.getBoardSizeRow();
+        this.boardSizeCol = model.getBoardSizeCol();
+
+
     }
 
     // to get the layoutX using the size of the pane calculating how much space is free in order to start in the right place
@@ -43,10 +50,10 @@ public class Board extends GridPane implements View {
         List<Name> names = model.namesOfTargets();
         int times = 0;
         Board board = new Board(model);
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
+        for (int i = 0; i < boardSizeRow; i++) {
+            for (int j = 0; j < boardSizeCol; j++) {
 
-                Target target = new Target(new Position(i, j), names.get(times));
+                Target target = new Target(names.get(times));
 
                 buttonSettings(target); // the method that change the setting of the button
                 board.add(target, j, i);
@@ -66,7 +73,7 @@ public class Board extends GridPane implements View {
     public void buttonSettings(Target target) {
         target.setPrefHeight(TARGET_HEIGHT);
         target.setPrefWidth(TARGET_WIDTH);
-        target.setStyle("-fx-background-color: #FFFFF8; -fx-text-fill: black; -fx-border-color: #000000;" +
+        target.setStyle("-fx-text-fill: black; -fx-border-color: #000000;" +
                 " -fx-border-width: 1px;");
 
 

@@ -1,10 +1,7 @@
 package UI;
 
 import Model.Name;
-import UI.Position;
-import View.View;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 
 /**
  * @author Jessé Sacramento
@@ -12,24 +9,18 @@ import javafx.scene.image.ImageView;
  */
 public class Target extends Button {
 
-    final double WIDTH = 80;
-    private Position pos;
-    private final ImageView noImage = new ImageView("File:C:\\Users\\JesseSacramento\\IdeaProjects\\Animation\\src\\Resources\\noImage.jpg");
     private final Name name;
 
-    public Target( Position pos, Name name ){
-        this.pos = pos;
+    public Target( Name name ){
         this.name = name;
     }
 
-    public void setTargetImage( ImageView imageView ){
-        imageView.setFitWidth(WIDTH);
-        imageView.setPreserveRatio(true);
-        setGraphic(imageView);
-    }
+    public void setTargetImage( String directory ){
+        setStyle("-fx-background-image: url('" + directory +"');" +
+                "-fx-background-size: cover;" +
+                "-fx-border-color: #605060;" +
+                "-fx-border-width: 1px;");
 
-    public Position getPos() {
-        return pos;
     }
 
     public Name getName() {
@@ -37,9 +28,10 @@ public class Target extends Button {
     }
 
     public void cleanImagesTargets(){
-        noImage.setFitWidth(WIDTH);
-        noImage.setPreserveRatio(true);
-        setGraphic(noImage);
+        setStyle("-fx-background-image: url('" + "Resources/gray_background.jpg" +"');" +
+                "-fx-background-size: cover;" +
+                "-fx-border-color: #605060;" +
+                "-fx-border-width: 1px;");
     }
 
 }

@@ -8,9 +8,13 @@ import java.util.List;
  * @version 26/01/2024
  */
 public enum Name {
-     UVA,BANANA,CANDLE,RUBIK_CUBE,SHOE,VOLCANO;
+     CANDLE,RUBIK_CUBE,SHOE,VOLCANO,PIECE_OF_ORANGE,ORANGE,HAMBURGER,SMURF,ROAD,SMURF_EATING,
+     SHOES,CUBE;
 
     public static List<Name> targetList(){
-        return Arrays.asList(UVA,BANANA,CANDLE,RUBIK_CUBE,SHOE,VOLCANO);
+        return Arrays.asList(
+                CANDLE,RUBIK_CUBE,SHOE,VOLCANO,
+                PIECE_OF_ORANGE, ORANGE, HAMBURGER,
+                SMURF, ROAD, SMURF_EATING, SHOES, CUBE);
     }
 }
